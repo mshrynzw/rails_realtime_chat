@@ -1,4 +1,6 @@
 class MessagesController < ApplicationController
+  before_action :require_login
+
   def index
     if request.path == root_path
       redirect_to messages_path and return

@@ -36,4 +36,18 @@ module Back4App
     Rails.logger.info "Response code: #{response.code}"
     response
   end
+
+  def self.login(username, password)
+    response = post('/login',
+                    body: { username: username, password: password }.to_json,
+                    headers: headers
+    )
+    Rails.logger.info "Back4App Login Response: #{response.body}"
+    Rails.logger.info "Response code: #{response.code}"
+    if response.success?
+      JSON.parse(response.body)
+    else
+      nil
+    end
+  end
 end
