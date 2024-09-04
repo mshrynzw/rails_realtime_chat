@@ -27,9 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
     form.addEventListener('submit', (e) => {
       e.preventDefault()
-      console.log('Form submitted') // デバッグ用ログ
+      console.log('Form submitted')
       if (input.value.length > 0) {
-        console.log('Sending message:', input.value) // デバッグ用ログ
+        console.log('Sending message:', input.value) 
         fetch('/messages', {
           method: 'POST',
           headers: {
