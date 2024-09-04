@@ -13,4 +13,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   #
   resources :messages, only: [:index, :create]
+
+  mount ActionCable.server => '/cable'
 end

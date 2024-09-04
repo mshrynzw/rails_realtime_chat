@@ -4,21 +4,11 @@
   <% end %>
 </div>
 
-<%= form_with(url: messages_path, local: false) do |f| %>
-  <%= f.text_field :content %>
-  <%= f.submit 'Send' %>
+<form id="new-message-form">
+<input type="text" id="message-input" placeholder="Type a message...">
+<button type="submit">Send</button>
+</form>
+
+<% if flash[:alert] %>
+  <div class="alert alert-danger"><%= flash[:alert] %></div>
 <% end %>
-
-<script>
-    const supabase = supabase.createClient('<%= ENV['SUPABASE_URL'] %>', '<%= ENV['SUPABASE_ANON_KEY'] %>')
-
-    supabase
-        .channel('public:messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-            const messageDiv = document.getElementById('messages')
-            const newMessage = document.createElement('p')
-            newMessage.textContent = payload.new.content
-            messageDiv.appendChild(newMessage)
-        })
-        .subscribe()
-</script>
