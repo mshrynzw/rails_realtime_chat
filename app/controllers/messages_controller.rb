@@ -1,5 +1,9 @@
 class MessagesController < ApplicationController
   def index
+    if request.path == root_path
+      redirect_to messages_path and return
+    end
+    
     @messages = Back4App.get_messages
     Rails.logger.info "Retrieved messages: #{@messages.inspect}"
   rescue => e
@@ -7,7 +11,7 @@ class MessagesController < ApplicationController
     @messages = []
     flash.now[:alert] = "Failed to load messages. Please try again later."
   end
-  
+
   def create
     Rails.logger.info "Received message: #{message_params.inspect}"
     response = Back4App.create_message(message_params[:content])
