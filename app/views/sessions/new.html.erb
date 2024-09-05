@@ -1,15 +1,31 @@
-<h1>ログイン</h1>
+<main class="w-full mx-auto p-6 max-h-20" style="max-width: 28rem">
+  <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+    <div class="p-4 sm:p-7">
+      <div class="text-center">
+        <h1 class="block text-2xl font-bold text-gray-800 dark:text-white" style="font-size: 1.5rem">
+          Realtime Chat
+        </h1>
+      </div>
 
-<%= form_with(url: login_path, local: true) do |f| %>
-  <div>
-    <%= f.label :username %>
-    <%= f.text_field :username %>
+      <div style="margin-top: 20px">
+        <%= form_with(url: login_path, local: true) do |f| %>
+          <div style="margin-bottom: 16px">
+            <%= f.label :username, class: "block text-sm mb-2 dark:text-white" %>
+            <div class="relative">
+              <%= f.text_field :username, placeholder: "Email", class: "py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" %>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px">
+            <%= f.label :password, class: "block text-sm mb-2 dark:text-white" %>
+            <div class="relative">
+              <%= f.password_field :password, placeholder: "Password", class: "py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" %>
+            </div>
+          </div>
+
+          <%= f.submit 'Login', class: "w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" %>
+        <% end %>
+      </div>
+    </div>
   </div>
-
-  <div>
-    <%= f.label :password %>
-    <%= f.password_field :password %>
-  </div>
-
-  <%= f.submit 'ログイン' %>
-<% end %>
+</main>

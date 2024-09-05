@@ -2,32 +2,30 @@ class MessagesController < ApplicationController
   before_action :require_login
 
   def index
-    if request.path == root_path
-      redirect_to messages_path and return
-    end
-    
     @messages = Back4App.get_messages
-    Rails.logger.info "Retrieved messages: #{@messages.inspect}"
+    @messages = @messages.sort_by { |m| m['createdAt'] }.reverse
   rescue => e
-    Rails.logger.error "Error fetching messages: #{e.message}"
     @messages = []
-    flash.now[:alert] = "Failed to load messages. Please try again later."
+    flash.now[:alert] = "メッセージの読み込みに失敗しました。エラー: #{e.message}"
+    Rails.logger.error "Error in MessagesController#index: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
   end
 
   def create
-    Rails.logger.info "Received message: #{message_params.inspect}"
-    response = Back4App.create_message(message_params[:content])
-    Rails.logger.info "Back4App response: #{response.inspect}"
-    if response.success?
-      ActionCable.server.broadcast('chat_channel', { message: message_params[:content] })
-      render json: { success: true }, status: :created
+    @message = Back4App.create_message(message_params[:content])
+    
+    if @message
+      ChatChannel.broadcast_message(@message)
+      respond_to do |format|
+        format.turbo_stream { head :ok }  # 空のレスポンスを返す
+        format.html { redirect_to messages_path }
+      end
     else
-      render json: { error: 'Failed to save message', details: response.body }, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.prepend("messages-container", partial: "messages/error") }
+        format.html { redirect_to messages_path, alert: "メッセージの送信に失敗しました。" }
+      end
     end
-  rescue => e
-    Rails.logger.error "Error creating message: #{e.message}"
-    Rails.logger.error e.backtrace.join("\n")
-    render json: { error: 'An unexpected error occurred' }, status: :internal_server_error
   end
 
   private

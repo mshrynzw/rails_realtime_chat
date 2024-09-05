@@ -1,0 +1,14 @@
+<% if @message %>
+  <%= turbo_stream.prepend "messages-container" do %>
+    <p class="text-left mt-3 text-gray-800 dark:text-neutral-200">
+      <span><%= format_datetime(@message['createdAt']) %></span>:
+      <span class="font-bold"><%= @message['content'] %></span>
+    </p>
+  <% end %>
+<% else %>
+  <%= turbo_stream.prepend "messages-container" do %>
+    <p class="text-left mt-3 text-red-500">
+      メッセージの送信に失敗しました。
+    </p>
+  <% end %>
+<% end %>

@@ -7,8 +7,14 @@ class ChatChannel < ApplicationCable::Channel
     # Any cleanup needed when channel is unsubscribed
   end
 
-  def speak(data)
-    message = Back4App.create_message(data['message'])
-    ActionCable.server.broadcast('chat_channel', { message: data['message'] })
+  def self.broadcast_message(message)
+    ActionCable.server.broadcast("chat_channel", {
+      message: {
+        objectId: message['objectId'],
+        content: message['content'],
+        createdAt: message['createdAt']
+      },
+      created_at: ApplicationController.helpers.format_datetime(message['createdAt'])
+    })
   end
 end
