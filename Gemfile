@@ -62,4 +62,4 @@ gem 'turbo-rails'
 gem 'stimulus-rails'
 
 gem 'dotenv-rails', groups: [:development, :test]
-gem "tailwindcss-rails", "~> 2.7"
+gem "tailwindcss-rails", "~> 3.0"
